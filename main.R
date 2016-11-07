@@ -1,5 +1,6 @@
 library(ggplot2)
 
+# Tom
 eeg1 = read.csv("eeg-data.csv")
 metadata = read.csv("subject-metadata.csv")
 metadata$id =metadata$ID
