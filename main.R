@@ -18,5 +18,9 @@ ggplot(eeg, aes(indra_time, attention_esense, colour=factor(Chosen.color))) +
 ggplot(eeg, aes(indra_time, meditation_esense, colour=factor(Chosen.color))) +
   stat_smooth()
 
+# check nobs
+mean(table(eeg$id))
+min(table(eeg$id))
+max(table(eeg$id))
 
 
