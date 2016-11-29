@@ -1,6 +1,5 @@
 library(ggplot2)
 
-# Tom
 eeg1 = read.csv("eeg-data.csv")
 metadata = read.csv("subject-metadata.csv")
 metadata$id =metadata$ID
@@ -9,14 +8,26 @@ eeg$indra_time = as.POSIXlt(eeg$indra_time)
 eeg$indra_time_delta = as.numeric(difftime(eeg$indra_time, 
                                            min(eeg$indra_time), unit='secs'))
 
-ggplot(eeg, aes(indra_time, attention_esense, colour=factor(id))) + 
-  geom_line(alpha=0.2)
+eeg_clean = subset(eeg, signal_quality < 128)
 
-ggplot(eeg, aes(indra_time, attention_esense, colour=factor(Chosen.color))) +
-  stat_smooth()
+ggplot(eeg_clean, aes(indra_time)) + 
+  stat_smooth(aes(y=attention_esense)) + 
+  stat_smooth(aes(y=meditation_esense), colour="black") +
+  facet_wrap(~ id) + xlab("Time") + ylab("Standardized Score") + ylim(c(0,100))
 
-ggplot(eeg, aes(indra_time, meditation_esense, colour=factor(Chosen.color))) +
-  stat_smooth()
+ggsave("trajectories.pdf", width=10, height=10)
+
+# ggplot(eeg_clean, aes(indra_time)) + 
+#   geom_line(aes(y=attention_esense)) + 
+#   geom_line(aes(y=meditation_esense), colour="black", alpha=0.2) +
+#   facet_wrap(~ id)
+# 
+# ggplot(eeg, aes(indra_time)) + stat_smooth(aes(y=meditation_esense), 
+#                                                               colour="black") + 
+#   stat_smooth(aes(y=attention_esense), colour="red")
+# 
+# ggplot(eeg, aes(indra_time, meditation_esense, colour=factor(Chosen.color))) +
+#   stat_smooth()
 
 # check nobs
 mean(table(eeg$id))
