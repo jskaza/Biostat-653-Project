@@ -1,4 +1,7 @@
 library(ggplot2)
+library(mlmmm)
+library(MCMCglmm)
+library(reshape)
 
 eeg1 = read.csv("eeg-data.csv")
 metadata = read.csv("subject-metadata.csv")
@@ -34,4 +37,25 @@ mean(table(eeg$id))
 min(table(eeg$id))
 max(table(eeg$id))
 
+eeg_clean = eeg_clean[which(eeg_clean$label != 'unlabeled'),]
+eeg_clean$session_time_delta = ifelse(eeg_clean$Session == 1, eeg_clean$indra_time_delta -
+                                        min(eeg_clean$indra_time_delta),
+                                      eeg_clean$indra_time_delta - 
+                                        min(subset(eeg_clean, eeg_clean$Session == 2)$indra_time_delta))
+
+
+
+eeg_clean$int = 1
+y = cbind(eeg_clean$attention_esense, eeg_clean$meditation_esense)
+subj = eeg_clean$id
+pred = cbind(eeg_clean$int, eeg_clean$Session, eeg_clean$session_time_delta, eeg_clean$Gender)
+xcol = 1:4
+zcol = 1
+
+# 
+# # mlmmm.em(y, subj, pred, xcol, zcol,maxits=2)
+fit = MCMCglmm(cbind(attention_esense, meditation_esense) ~ trait - 1 + Gender + 
+                 session_time_delta:Session + session_time_delta,
+         random = ~us(session_time_delta):id, data = eeg_clean,
+         family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
 
