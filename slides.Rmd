@@ -3,16 +3,43 @@ title: "A Longitudinal Analysis of the Synchronized Brainwave Dataset"
 author: "Thomas Edwards and Jonathan Skaza"
 date: "12/7/2016"
 output: beamer_presentation
+<<<<<<< HEAD
+=======
+bibliography: bibliography.bib
+>>>>>>> b3ce2ebd748202277cfa9106b63e143c2cb2fb4d
 ---
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
 
-## Background
+## Inspiration
+- Has been a growing interest over recent years to further understand the brain's ability to comprehend information at a faster rate
+- Researchers at MIT performed an experiment on Monkeys where they discovered that synchronized brain waves enable rapid learning. [@trafton]
 
-- Bullet 1
-- Bullet 2
+```{r fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img = readPNG("figures/brain.png")
+grid.raster(img)
+```
+
+## Introduction
+- As a next step, we thought it would be intriguing to explore this idea further by investigating how ones' brain waves can be manipulated to maintain a synchronized neurological state so that cognitive function is optimized. 
+- To do this we analyzed EEG data collected on subjects exposed to different stimuli.
+
+```{r fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img = readPNG("figures/device.png")
+grid.raster(img)
+```
+
+## Background
+- Study involved 30 voluntary students from UC Berkeley.
+- Participants where randomly assigned to watch one of the two stimulus videos (both videos where 5 minutes and 19 seconds long).
+- Everyone was hooked up to an Electroencephalography (EEG) which recorded electrical brain activity as they viewed the video and followed the instructions. 
+
 
 ## Smoothed Trajectories by Subject
 
@@ -23,6 +50,7 @@ ggplot(eeg_clean, aes(indra_time)) +
   facet_wrap(~ id) + xlab("Time") + ylab("Standardized Score") + ylim(c(0,100))
 ```
 
+<<<<<<< HEAD
 ## Model
 
 $$
@@ -50,3 +78,6 @@ $$
 
 - \textit{Fixed Effects}: Intercept, Session, Gender, Color, Time, Hidden Icons, Previous Exposure to Ad
 - \textit{Random Effects}: Intercept, Time
+=======
+## References
+>>>>>>> b3ce2ebd748202277cfa9106b63e143c2cb2fb4d
