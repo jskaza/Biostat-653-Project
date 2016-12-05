@@ -3,10 +3,7 @@ title: "A Longitudinal Analysis of the Synchronized Brainwave Dataset"
 author: "Thomas Edwards and Jonathan Skaza"
 date: "12/7/2016"
 output: beamer_presentation
-<<<<<<< HEAD
-=======
 bibliography: bibliography.bib
->>>>>>> b3ce2ebd748202277cfa9106b63e143c2cb2fb4d
 ---
 
 ```{r global_options, include=FALSE}
@@ -17,7 +14,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 - Has been a growing interest over recent years to further understand the brain's ability to comprehend information at a faster rate
 - Researchers at MIT performed an experiment on Monkeys where they discovered that synchronized brain waves enable rapid learning. [@trafton]
 
-```{r fig.height=4, echo=FALSE}
+```{r fig.height=2, echo=FALSE, fig.align='center'}
 library(png)
 library(grid)
 img = readPNG("figures/brain.png")
@@ -28,9 +25,7 @@ grid.raster(img)
 - As a next step, we thought it would be intriguing to explore this idea further by investigating how ones' brain waves can be manipulated to maintain a synchronized neurological state so that cognitive function is optimized. 
 - To do this we analyzed EEG data collected on subjects exposed to different stimuli.
 
-```{r fig.height=4, echo=FALSE}
-library(png)
-library(grid)
+```{r fig.height=2, echo=FALSE, fig.align='center'}
 img = readPNG("figures/device.png")
 grid.raster(img)
 ```
@@ -50,7 +45,13 @@ ggplot(eeg_clean, aes(indra_time)) +
   facet_wrap(~ id) + xlab("Time") + ylab("Standardized Score") + ylim(c(0,100))
 ```
 
-<<<<<<< HEAD
+## Distribition of Responses
+
+```{r dist, fig.width = 5, echo = FALSE, warning=FALSE, message=FALSE}
+qplot(eeg_clean$attention_esense, geom = 'histogram', xlab = "Standardized Attention Score")
+qplot(eeg_clean$meditation_esense, geom = 'histogram', xlab = "Standardized Meditation Score")
+```
+
 ## Model
 
 $$
@@ -76,8 +77,20 @@ $$
 \end{array}\right)
 $$
 
+- \textit{Responses}: Attention, Meditation
 - \textit{Fixed Effects}: Intercept, Session, Gender, Color, Time, Hidden Icons, Previous Exposure to Ad
 - \textit{Random Effects}: Intercept, Time
-=======
+
+
+
+## Results
+
+```{r results="asis",echo = FALSE, warning=FALSE, message=FALSE}
+library(xtable)
+tab = xtable(summary(fit)$solutions)
+options(xtable.comment = FALSE)
+print(tab, size="\\fontsize{8pt}{10pt}\\selectfont")
+```
+
+
 ## References
->>>>>>> b3ce2ebd748202277cfa9106b63e143c2cb2fb4d
