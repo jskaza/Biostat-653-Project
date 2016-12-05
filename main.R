@@ -1,7 +1,6 @@
 library(ggplot2)
 library(mlmmm)
 library(MCMCglmm)
-library(reshape)
 
 eeg1 = read.csv("eeg-data.csv")
 metadata = read.csv("subject-metadata.csv")

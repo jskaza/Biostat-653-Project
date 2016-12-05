@@ -2,7 +2,7 @@
 title: "A Longitudinal Analysis of the Synchronized Brainwave Dataset"
 author: "Thomas Edwards and Jonathan Skaza"
 date: "12/7/2016"
-output: ioslides_presentation
+output: beamer_presentation
 ---
 
 ```{r global_options, include=FALSE}
@@ -16,10 +16,37 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ## Smoothed Trajectories by Subject
 
-```{r cars, echo = FALSE, warning=FALSE, message=FALSE}
+```{r traj, echo = FALSE, warning=FALSE, message=FALSE}
 ggplot(eeg_clean, aes(indra_time)) + 
   stat_smooth(aes(y=attention_esense)) + 
   stat_smooth(aes(y=meditation_esense), colour="black") +
   facet_wrap(~ id) + xlab("Time") + ylab("Standardized Score") + ylim(c(0,100))
 ```
 
+## Model
+
+$$
+\left(\begin{array}{c}
+\mathbf{Y_{1i}} \\
+\mathbf{Y_{2i}}
+\end{array}\right)
+= \mathbf{X_i}^T 
+\left(\begin{array}{c}
+\boldsymbol{\beta_{1i}} \\
+\boldsymbol{\beta_{2i}}
+\end{array}\right)
++
+\mathbf{Z_i}^T 
+\left(\begin{array}{c}
+\boldsymbol{b_{1i}} \\
+\boldsymbol{b_{2i}}
+\end{array}\right)
++
+\left(\begin{array}{c}
+\boldsymbol{\epsilon_{1i}} \\
+\boldsymbol{\epsilon_{2i}}
+\end{array}\right)
+$$
+
+- \textit{Fixed Effects}: Intercept, Session, Gender, Color, Time, Hidden Icons, Previous Exposure to Ad
+- \textit{Random Effects}: Intercept, Time
