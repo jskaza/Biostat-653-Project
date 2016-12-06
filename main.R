@@ -3,68 +3,65 @@ library(mlmmm)
 library(MCMCglmm)
 library(lme4)
 
-eeg1 = read.csv("eeg-data.csv")
-metadata = read.csv("subject-metadata.csv")
-metadata$id =metadata$ID
-eeg = merge(eeg1, metadata, by="id")
-eeg$indra_time = as.POSIXlt(eeg$indra_time)
+############## data cleaning ############## 
+eeg1 = read.csv("eeg-data.csv") # read-in dataset
+metadata = read.csv("subject-metadata.csv") # read-in metadata/other covariates
+metadata$id = metadata$ID # create identical identifier
+eeg = merge(eeg1, metadata, by="id") # merge dataset and metadata
+eeg$indra_time = as.POSIXlt(eeg$indra_time) # create time variable
 eeg$indra_time_delta = as.numeric(difftime(eeg$indra_time, 
-                                           min(eeg$indra_time), unit='secs'))
+                                           min(eeg$indra_time), unit='secs')) # time in secs
+eeg_clean = subset(eeg, signal_quality < 128) # delete observations with poor signal quality
+eeg_clean = eeg_clean[which(eeg_clean$label != 'unlabeled'),] # delete observations no related to stimuli
+# standardize time between sessions
+eeg_clean$time = ifelse(eeg_clean$Session == 1, eeg_clean$indra_time_delta - 
+                          min(eeg_clean$indra_time_delta),
+                        eeg_clean$indra_time_delta - 
+                          min(subset(eeg_clean, eeg_clean$Session == 2)$indra_time_delta)) 
 
-eeg_clean = subset(eeg, signal_quality < 128)
-
-ggplot(eeg_clean, aes(indra_time)) + 
+############## exploratory analysis ##############
+traj = ggplot(eeg_clean, aes(indra_time)) + 
   stat_smooth(aes(y=attention_esense)) + 
   stat_smooth(aes(y=meditation_esense), colour="black") +
-  facet_wrap(~ id) + xlab("Time") + ylab("Standardized Score") + ylim(c(0,100))
+  facet_wrap(~ id) + xlab("Time") + ylab("Standardized Score") + 
+  ylim(c(0,100))# panel plot of attention and meditation trajectories
 
-ggsave("trajectories.pdf", width=10, height=10)
+# plot distributions of attention and meditation scores
+dist_a = qplot(eeg_clean$attention_esense, geom = 'histogram', 
+               xlab = "Standardized Attention Score")
+dist_m = qplot(eeg_clean$meditation_esense, geom = 'histogram', 
+               xlab = "Standardized Meditation Score")
 
-# ggplot(eeg_clean, aes(indra_time)) + 
-#   geom_line(aes(y=attention_esense)) + 
-#   geom_line(aes(y=meditation_esense), colour="black", alpha=0.2) +
-#   facet_wrap(~ id)
-# 
-# ggplot(eeg, aes(indra_time)) + stat_smooth(aes(y=meditation_esense), 
-#                                                               colour="black") + 
-#   stat_smooth(aes(y=attention_esense), colour="red")
-# 
-# ggplot(eeg, aes(indra_time, meditation_esense, colour=factor(Chosen.color))) +
-#   stat_smooth()
-
-# check nobs
+# check nobs per subject
 mean(table(eeg$id))
 min(table(eeg$id))
 max(table(eeg$id))
 
-eeg_clean = eeg_clean[which(eeg_clean$label != 'unlabeled'),]
-eeg_clean$time = ifelse(eeg_clean$Session == 1, eeg_clean$indra_time_delta -
-                                        min(eeg_clean$indra_time_delta),
-                                      eeg_clean$indra_time_delta - 
-                                        min(subset(eeg_clean, eeg_clean$Session == 2)$indra_time_delta))
+mean(table(eeg_clean$id))
+min(table(eeg_clean$id))
+max(table(eeg_clean$id))
 
 
 
-eeg_clean$int = 1
-y = cbind(eeg_clean$attention_esense, eeg_clean$meditation_esense)
-subj = eeg_clean$id
-pred = cbind(eeg_clean$int, eeg_clean$Session, eeg_clean$time, eeg_clean$Gender)
-xcol = 1:4
-zcol = 1
+############## models ##############
+# univariate mixed models
+fit_a = lmer(attention_esense ~  1 + Gender + Seen.video.before. + Saw.icons. + Chosen.color + 
+               time*as.factor(Session) + (1|id), data = eeg_clean)
+fit_m = lmer(meditation_esense ~  1 + Gender + Seen.video.before. + Saw.icons. + Chosen.color + 
+               time*as.factor(Session) + (1|id), data = eeg_clean)
 
-# 
-# # mlmmm.em(y, subj, pred, xcol, zcol,maxits=2)
-fit = MCMCglmm(cbind(attention_esense, meditation_esense) ~ trait - 1 + Gender + 
-                 Seen.video.before. + Saw.icons. + Chosen.color +
-                 time*as.factor(Session),
-         random = ~us(time):id, data = eeg_clean,
-         family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
+# multivariate mixed models
+# fit = MCMCglmm(cbind(attention_esense, meditation_esense) ~ trait - 1 + Gender + 
+#                  Seen.video.before. + Saw.icons. + Chosen.color +
+#                  time*as.factor(Session),
+#          random = ~us(time):id, data = eeg_clean,
+#          family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
 
-fit = MCMCglmm(cbind(attention_esense, meditation_esense) ~ trait - 1 +
-                 at.level(trait,1):Gender + at.level(trait,2):Gender+ 
-                 at.level(trait,1):Seen.video.before. +  at.level(trait,2):Seen.video.before.
-                 + at.level(trait,1):Saw.icons. +  at.level(trait,2):Saw.icons.
-                 + at.level(trait,1):Chosen.color + at.level(trait,2):Chosen.color
-                 + at.level(trait,1):time*as.factor(Session)+ at.level(trait,2):time*as.factor(Session),
-               random = ~us(time):id, data = eeg_clean,
-               family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
+# fit = MCMCglmm(cbind(attention_esense, meditation_esense) ~ trait - 1 +
+#                  at.level(trait,1):Gender + at.level(trait,2):Gender+
+#                  at.level(trait,1):Seen.video.before. +  at.level(trait,2):Seen.video.before.
+#                  + at.level(trait,1):Saw.icons. +  at.level(trait,2):Saw.icons.
+#                  + at.level(trait,1):Chosen.color + at.level(trait,2):Chosen.color
+#                  + at.level(trait,1):time*as.factor(Session)+ at.level(trait,2):time*as.factor(Session),
+#                random = ~us(time):id, data = eeg_clean,
+#                family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
