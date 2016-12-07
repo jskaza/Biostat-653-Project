@@ -54,10 +54,10 @@ fit_m = lmer(meditation_esense ~  1 + Gender + Seen.video.before. + Saw.icons. +
 prior = list(R=list(V=diag(2), nu=1.002),G=list(G1=list(V=diag(2), nu=1.002)))
 
 fit_am = MCMCglmm(cbind(attention_esense, meditation_esense) ~ trait-1+
-                 at.level(trait,1):Gender + at.level(trait,2):Gender+ 
+                 at.level(trait,1):at.level(Gender,"f") + at.level(trait,2):at.level(Gender,"f")+
                  at.level(trait,1):Seen.video.before. +  at.level(trait,2):Seen.video.before.
                + at.level(trait,1):Saw.icons. +  at.level(trait,2):Saw.icons.
                + at.level(trait,1):Chosen.color + at.level(trait,2):Chosen.color
                + at.level(trait,1):time*as.factor(Session)+ at.level(trait,2):time*as.factor(Session),
-               random = ~us(trait):id, data = eeg_clean, prior=prior, burnin=20000, nitt = 35000,
+               random = ~us(trait):id, data = eeg_clean, prior=prior, #burnin=20000, nitt = 35000,
                singular.ok = T, family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
