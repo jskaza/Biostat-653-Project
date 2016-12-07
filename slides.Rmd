@@ -11,8 +11,8 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
 
 ## Inspiration
-- Has been a growing interest over recent years to further understand the brain's ability to comprehend information at a faster rate.
-- Researchers at MIT performed an experiment on Monkeys where they discovered that synchronized brain waves enable rapid learning [@trafton].
+- Has been a growing interest over recent years to further understand the brain's ability to comprehend information at a faster rate
+- Researchers at MIT performed an experiment on monkeys where they discovered that synchronized brain waves enable rapid learning [@trafton]
 
 ```{r brain, fig.height=2, echo=FALSE, fig.align='center'}
 library(png)
@@ -22,8 +22,8 @@ grid.raster(img)
 ```
 
 ## Introduction
-- As a next step, we thought it would be intriguing to explore this idea further by investigating how ones' brain waves can be manipulated to maintain a synchronized neurological state so that cognitive function is optimized. 
-- To do this we analyzed EEG data collected on subjects exposed to different stimuli.
+- As a next step, we thought it would be intriguing to explore this idea further by investigating how ones' brain waves can be manipulated to maintain a synchronized neurological state so that cognitive function is optimized  
+- To do this we analyzed EEG data collected on subjects exposed to different stimuli
 
 ```{r device, fig.height=2, echo=FALSE, fig.align='center'}
 img = readPNG("figures/device.png")
@@ -31,11 +31,12 @@ grid.raster(img)
 ```
 
 ## Background
-- Study involved 30 voluntary students from UC Berkeley [@data].
-- Participants where randomly assigned to watch one of two stimulus videos (both videos 5:19 min).
-- Everyone was hooked up to an Electroencephalography (EEG) headset which recorded electrical brain activity as they viewed the video and followed the instructions. Frequency values for alpha, beta, delta, gamma, and theta waves were recorded approximately every .3 seconds so each individual had 1000 repeated measures on average.  
-- Signal quality on the outputted values were also recorded (0 representing perfect signal quality).
-- Decided to remove all values with signal quality larger than 128 since at that point it indicates the EEG headset is being worn incorrectly.
+- Study involved 30 voluntary students from UC Berkeley [@data]
+- Participants were randomly assigned to watch one of two stimulus videos (both videos 5:19 min)
+- Everyone was hooked up to an Electroencephalography (EEG) headset which recorded electrical brain activity as they viewed the video and followed the instructions 
+- Frequency values for alpha, beta, delta, gamma, and theta waves were recorded approximately every .3 seconds so each individual had 1000 repeated measures on average 
+- Signal quality on the outputted values were also recorded (0 representing perfect signal quality)
+- Decided to remove all values with signal quality larger than 128 since at that point it indicates the EEG headset is being worn incorrectly
 
 ## Metadata
 
@@ -87,7 +88,6 @@ library(xtable)
 tab = xtable(coef(summary(fit_a)))
 options(xtable.comment = FALSE)
 print(tab)
-# print(tab, size="\\fontsize{8pt}{10pt}\\selectfont")
 ```
 
 ## Meditation Results
@@ -96,7 +96,6 @@ print(tab)
 tab = xtable(coef(summary(fit_m)))
 options(xtable.comment = FALSE)
 print(tab)
-# print(tab, size="\\fontsize{8pt}{10pt}\\selectfont")
 ```
 
 ## Accounting for Correlation Between Responses
@@ -129,7 +128,25 @@ $$
 - \textit{Fixed Effects}: Intercept, Session, Gender, Color, Time, Hidden Icons, Previous Exposure to Ad
 - \textit{Random Effects}: Intercept
 
-## Conclusion
+## Multivariate Results
+```{r multi, results="asis",echo = FALSE, warning=FALSE, message=FALSE}
+tab = xtable(summary(fit_am)$solutions)
+options(xtable.comment = FALSE)
+print(tab, size="\\fontsize{6pt}{8pt}\\selectfont")
+```
+
+
+## Conclusions and Future Work
+\textit{Conclusions}:
+
+- In both the multivariate and univariate analyses, time and the interaction between time and stimuli are significant  
+- Evidence that Stimulus 1 was better at increasing attention level over time while Stimulus 2 was significantly better at increasing meditation level over time
+- Most other covariates weren't significant (exception of gender for attention)  
+
+\textit{Future Work}:
+
+- Experiment with quadratic terms and/or more interactions  
+- Possibly add more responses (theta, gamma wave data)  
 
 
 ## References
