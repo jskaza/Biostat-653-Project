@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & Estimate & Std. Error & t value \\ 
+  \hline
+(Intercept) & 62.99 & 5.29 & 11.90 \\ 
+  Genderm & 4.86 & 3.70 & 1.31 \\ 
+  Seen.video.before.y & -9.74 & 3.83 & -2.54 \\ 
+  Saw.icons.n & -0.26 & 3.92 & -0.07 \\ 
+  Saw.icons.smiley & -5.40 & 4.64 & -1.16 \\ 
+  Saw.icons.star & -8.83 & 7.84 & -1.13 \\ 
+  Chosen.colorg & 4.57 & 3.48 & 1.31 \\ 
+  Chosen.colorr & 2.08 & 3.79 & 0.55 \\ 
+  Chosen.colory & -4.66 & 7.05 & -0.66 \\ 
+  time & -0.06 & 0.00 & -21.71 \\ 
+  as.factor(Session)2 & -3.37 & 2.82 & -1.20 \\ 
+  time:as.factor(Session)2 & 0.02 & 0.00 & 5.45 \\ 
+   \hline
+\end{tabular}
+\end{table}

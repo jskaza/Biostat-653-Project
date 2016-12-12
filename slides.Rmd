@@ -69,12 +69,12 @@ dist_m
 ## Univariate Models
 
 $$
-\mathbf{Y_{1ij}} = \mathbf{X_{ij}}^T \boldsymbol{\beta_{1}} + \mathbf{Z_{ij}}^T \boldsymbol{b_{1i}}
-+ \boldsymbol{\epsilon_{1ij}}
+\mathbf{Y_{1i}} = \mathbf{X_{i}}^T \boldsymbol{\beta_{1}} + \mathbf{Z_{i}}^T \boldsymbol{b_{1i}}
++ \boldsymbol{\epsilon_{1i}}
 $$
 $$
-\mathbf{Y_{2ij}} = \mathbf{X_{ij}}^T \boldsymbol{\beta_{2}} + \mathbf{Z_{ij}}^T \boldsymbol{b_{2i}}
-+ \boldsymbol{\epsilon_{2ij}}
+\mathbf{Y_{2i}} = \mathbf{X_{i}}^T \boldsymbol{\beta_{2}} + \mathbf{Z_{i}}^T \boldsymbol{b_{2i}}
++ \boldsymbol{\epsilon_{2i}}
 $$
 
 - \textit{Responses}: Attention, Meditation
@@ -87,7 +87,7 @@ $$
 library(xtable)
 tab = xtable(coef(summary(fit_a)))
 options(xtable.comment = FALSE)
-print(tab)
+print(tab, size="\\fontsize{10pt}{8pt}\\selectfont")
 ```
 
 ## Meditation Results
@@ -95,31 +95,31 @@ print(tab)
 ```{r med, results="asis",echo = FALSE, warning=FALSE, message=FALSE}
 tab = xtable(coef(summary(fit_m)))
 options(xtable.comment = FALSE)
-print(tab)
+print(tab, size="\\fontsize{10pt}{8pt}\\selectfont")
 ```
 
 ## Accounting for Correlation Between Responses
 
 $$
 \left(\begin{array}{c}
-\mathbf{Y_{1ij}} \\
-\mathbf{Y_{2ij}}
+\mathbf{Y_{1i}} \\
+\mathbf{Y_{2i}}
 \end{array}\right)
-= \mathbf{X_{ij}}^T 
+= \mathbf{X_{i}}^T 
 \left(\begin{array}{c}
 \boldsymbol{\beta_{1}} \\
 \boldsymbol{\beta_{2}}
 \end{array}\right)
 +
-\mathbf{Z_{ij}}^T 
+\mathbf{Z_{i}}^T 
 \left(\begin{array}{c}
 \boldsymbol{b_{1i}} \\
 \boldsymbol{b_{2i}}
 \end{array}\right)
 +
 \left(\begin{array}{c}
-\boldsymbol{\epsilon_{1ij}} \\
-\boldsymbol{\epsilon_{2ij}}
+\boldsymbol{\epsilon_{1i}} \\
+\boldsymbol{\epsilon_{2i}}
 \end{array}\right)
 $$
 
@@ -132,7 +132,7 @@ $$
 ```{r multi, results="asis",echo = FALSE, warning=FALSE, message=FALSE}
 tab = xtable(summary(fit_am)$solutions)
 options(xtable.comment = FALSE)
-print(tab, size="\\fontsize{6pt}{8pt}\\selectfont")
+print(tab, size="\\fontsize{4pt}{6pt}\\selectfont")
 ```
 
 
