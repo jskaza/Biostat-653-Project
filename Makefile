@@ -3,7 +3,18 @@ main.pdf: bibliography.bib main.tex figures/meta.tex figures/attention.tex figur
 	bibtex main
 	pdflatex main
 	pdflatex main
-	R CMD BATCH render.R # generate corresponding slides
+	rm *.aux
+	rm *.blg
+	rm *.log
 
 figures/%.tex: main.R
-	R CMD BATCH main.R
+	R CMD BATCH render.R
+
+main.tex: 
+	pdflatex main
+	bibtex main
+	pdflatex main
+	pdflatex main
+	rm *.aux
+	rm *.blg
+	rm *.log

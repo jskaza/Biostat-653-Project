@@ -230,10 +230,10 @@ Saving 7 x 7 in image
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 > 
 > # trajectories
-> ggsave("figures/traj.pdf", traj, device="pdf", height = 10, width = 10)
+> ggsave("figures/traj.pdf", traj, device="pdf", height = 10, width = 11)
 `geom_smooth()` using method = 'loess'
 `geom_smooth()` using method = 'loess'
 > 
 > proc.time()
    user  system elapsed 
-191.105   3.444 194.758 
+198.634   3.987 203.099 

@@ -189,4 +189,4 @@ Output created: slides.pdf
 > 
 > proc.time()
    user  system elapsed 
-209.984   4.571 215.697 
+202.256   4.210 206.819 
