@@ -120,16 +120,6 @@ fit_am = MCMCglmm(cbind(attention, meditation) ~ trait-1
 #                random = ~us(trait):id, data = eeg_clean, 
 #                family = c("gaussian", "gaussian"), rcov = ~us(trait):units)
 
-## Trace plots of the parameters
-par(mai=rep(0.5,4))
-plot(fit$VCV)
-par(mfrow=c(1,1))
-
-par(mai=rep(0.5,4))
-plot(fit$Sol)
-par(mfrow=c(1,1))
-
-
 ############## figures ##############
 # metadata
 metadata = xtable(meta, caption="Summary statistics for number of repeated measures, $n_i$, before
@@ -149,7 +139,7 @@ print.xtable(med, type="latex", file="figures/meditation.tex")
 # multivariate results
 multi = xtable(summary(fit_am)$solutions, label="tab:bivariate", caption="Results from the bivariate
                linear mixed effects model. at.level(trait,1) refers to attention while 
-               at.level(trait,2) corresponds to meditaion.")
+               at.level(trait,2) corresponds to meditation.")
 print.xtable(multi, type="latex", file="figures/bivariate.tex")
 
 # repsonse distributions
